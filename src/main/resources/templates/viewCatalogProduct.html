@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thyneleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8" content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Товар из каталога</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/media.css}"/>
+</head>
+<script src="/js/magnifier.js">
+</script>
+<body>
+<div class="wrapper">
+  <header class="header_client">
+    <div class="header_client_up">
+      <div class="header_client_up_component">
+        <a href="/howToOrder" class="header_client_up_component_link">
+          Как заказать
+        </a>
+      </div>
+      <div class="header_client_up_component">
+        <a href="/company" class="header_client_up_component_link">
+          О нас
+        </a>
+      </div>
+      <div class="header_client_up_component">
+        <a href="/contacts" class="header_client_up_component_link">
+          Контакты
+        </a>
+      </div>
+      <div class="header_client_up_component">
+        <img class="header_client_up_component_svg" th:src="@{/img/images/phoneIcon.svg}" alt="phone" />
+        <a href="tel:+79372552649" class="header_client_up_component_link">
+          +7 937 255 26 49
+        </a>
+      </div>
+      <div class="header_client_up_component">
+        <img class="header_client_up_component_svg" th:src="@{/img/images/mailIcon.svg}" alt="mail" />
+        <a href="mailto:mail@example.com" class="header_client_up_component_link">
+          Написать
+        </a>
+      </div>
+    </div>
+    <div class="header_client_down">
+      <div class="header_client_down_component_logo">
+        <a href="/" class="header_client_down_component_head">
+          Планета подарков
+        </a>
+      </div>
+      <div sec:authorize="isAuthenticated()" class="header_client_down_component">
+        <a href="/adminPanel" sec:authentication="name" class="header_client_down_component_link">
+        </a>
+      </div>
+      <div sec:authorize="!isAuthenticated()" class="header_client_down_component">
+        <a href="/" class="header_client_down_component_link">
+          Гость
+        </a>
+      </div>
+      <div sec:authorize="isAuthenticated()" class="header_client_down_component">
+        <a class="header_client_down_component_link" href="/logout">
+          Выйти
+        </a>
+      </div>
+      <div sec:authorize="!isAuthenticated()" class="header_client_down_component">
+        <a class="header_client_down_component_link" href="/login">
+          Войти
+        </a>
+      </div>
+      <div class="header_client_down_component">
+        <img class="header_client_down_component_svg" th:src="@{/img/images/catalogIcon.svg}" alt="catalog" />
+        <a href="/catalog" class="header_client_down_component_link">
+          Каталог товаров
+        </a>
+      </div>
+      <div class="header_client_down_component">
+        <img class="header_client_down_component_svg" th:src="@{/img/images/basketIcon.svg}" alt="basket" />
+        <a href="/basket" class="header_client_down_component_link">
+          Корзина
+        </a>
+      </div>
+    </div>
+  </header>
+  <section class="content_client">
+    <div class="view_catalog_product">
+      <h1 class="view_catalog_product_head" th:text="${productForm.nameProduct}">
+
+      </h1>
+      <div class="view_catalog_product_block">
+        <div class="view_catalog_product_block_left">
+          <div class="view_catalog_product_block_left_size">
+            <img id="myimage" class="view_catalog_product_block_left_size_img" th:src="@{'/uploads/img/images/' + ${productForm.photoProduct}}" alt="catalogImg" />
+          </div>
+        </div>
+        <div class="view_catalog_product_block_right">
+          <div class="view_catalog_product_block_right_group">
+            <h2 class="view_catalog_product_block_right_group_h">
+              Группа:
+            </h2>
+            <div class="view_catalog_product_block_right_group_text" th:text="${productForm.groupProduct}">
+
+            </div>
+          </div>
+          <div class="view_catalog_product_block_right_material">
+            <h2 class="view_catalog_product_block_right_material_h">
+              Материал:
+            </h2>
+            <div class="view_catalog_product_block_right_material_text" th:text="${productForm.material}">
+
+            </div>
+          </div>
+          <div class="view_catalog_product_block_right_description">
+            <h2 class="view_catalog_product_block_right_description_h">
+              Описание:
+            </h2>
+            <div class="view_catalog_product_block_right_description_text" th:text="${productForm.description}">
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <form class="view_catalog_product_product_size" th:action="@{/catalog/catalogProduct/viewCatalogProduct}" method="post">
+        <input name="groupProduct" th:value="${productForm.groupProduct}" type="hidden"/>
+        <input name="productId" th:value="${productForm.id}" type="hidden"/>
+        <div class="view_catalog_product_product_size_left">
+          <h2 class="view_catalog_product_product_size_left_h">
+            Размеры товара:
+          </h2>
+          <div class="view_catalog_product_product_size_left_elem">
+            <div class="view_catalog_product_product_size_left_elem_block">
+              Размер
+            </div>
+            <div class="view_catalog_product_product_size_left_elem_block">
+              Цена
+            </div>
+            <div class="view_catalog_product_product_size_left_elem_count">
+              Количество
+            </div>
+
+          </div>
+          <div class="view_catalog_product_product_size_left_elem" data-th-each="productSize : ${allProductSizes}">
+            <div class="view_catalog_product_product_size_left_elem_block" th:text="${productSize.sizeProduct}"></div>
+            <div class="view_catalog_product_product_size_left_elem_block" th:if="${productSize.discount==0}">
+              <div th:text="${productSize.price}">
+
+              </div>
+              <div>
+                ₽
+              </div>
+            </div>
+            <div class="view_catalog_product_product_size_left_elem_block_discount" th:if="${productSize.discount>0}">
+              <div th:text="${productSize.price}">
+
+              </div>
+              <div>
+                ₽&#160;Скидка&#160;
+              </div>
+              <div th:text="${productSize.discount}">
+
+              </div>
+              <div>
+                %
+              </div>
+            </div>
+            <div class="view_catalog_product_product_size_left_elem_count">
+              <input name="lstPrSz" th:value="${productSize.getId()}" type="hidden"/>
+              <input name="lstCountPrSz" class="view_catalog_product_product_size_left_elem_count_input" min="0" max="2147483647" value="0" type="number" />
+            </div>
+          </div>
+        </div>
+        <div class="view_catalog_product_product_size_right">
+          <button class="view_catalog_product_product_size_right_button" type="submit">Добавить в корзину</button>
+          <div class="view_catalog_product_product_size_right_error" th:if="${param.error}">
+            Выберите количество товара
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+  <footer class="footer_client">
+    <div class="footer_client_left">
+      <div class="footer_client_left_head">
+        Склады и магазины
+      </div>
+      <a href="https://yandex.ru/maps/org/planeta_podarkov/1707885753/?ll=45.984000%2C51.521561&mode=search&sctx=ZAAAAAgBEAAaKAoSCTHQtS%2Bg%2BUZAEfCJdap8wUlAEhIJZK2h1F5Eiz8RT3Rd%2BMH5dD8iBgABAgMEBSgKOABAw80GSAFiEmxldG9fdl9nb3JvZGU9dHJ1ZWoCcnWdAc3MTD2gAQCoAQC9ARwrAGXCAQW5ibGuBuoBAPIBAPgBAIICQdCe0LPQvtGA0L7QtNC90LDRjyDRg9C70LjRhtCwLCA5MSDQn9C70LDQvdC10YLQsCDQv9C%2B0LTQsNGA0LrQvtCyigIAkgIDMTk0mgIMZGVza3RvcC1tYXBz&sll=45.984000%2C51.521561&sspn=0.106510%2C0.040957&text=Огородная%20улица%2C%2091%20Планета%20подарков&z=13.96" class="footer_client_left_link">
+        Магазин 'Планета подарков', Ул. Огородная, 91, расписание: без выходных с 9-00 до 19-30
+      </a>
+      <a href="https://yandex.ru/maps/org/postelnoye_belyo/176486838870/?ll=45.950429%2C51.497928&mode=search&sctx=ZAAAAAgBEAAaKAoSCcuhRbbz%2FUZAET3vxoLCwklAEhIJL4Zyol2Fyj8RhA1Pr5RltD8iBgABAgMEBSgKOABAiowGSAFiEmxldG9fdl9nb3JvZGU9dHJ1ZWoCcnWdAc3MTD2gAQCoAQC9Af4CF3PCAQbW5L27kQXqAQDyAQD4AQCCAnXQodC60LvQsNC0INCe0L%2FRgtC%2B0LLQvi3RgNC%2B0LfQvdC40YfQvdGL0Lkg0YDQsNGB0L%2FRgNC%2B0LTQsNC20L3Ri9C5INGG0LXQvdGC0YAsINCj0LsuINCa0YDRi9C80YHQutC40Lkg0L%2FRgNC%2B0LXQt9C0IDOKAgCSAgMxOTSaAgxkZXNrdG9wLW1hcHM%3D&sll=45.950429%2C51.497928&sspn=0.103598%2C0.039858&text=Склад%20Оптово-розничный%20распродажный%20центр%2C%20Ул.%20Крымский%20проезд%203&z=14" class="footer_client_left_link">
+        Склад Оптово-розничный распродажный центр, Ул. Крымский проезд 3, расписание: Вт, Чт, Пт с 10-00 до 16-00
+      </a>
+      <div class="footer_client_left_head">
+        Информация
+      </div>
+      <a href="/howToOrder" class="footer_client_left_link">
+        Как заказать
+      </a>
+      <a href="/company" class="footer_client_left_link">
+        О нас
+      </a>
+      <a href="/contacts" class="footer_client_left_link">
+        Контакты
+      </a>
+      <div class="footer_client_left_info">
+        © 1996-2023, ИП Моиисеенко Виктория Николаевна
+      </div>
+    </div>
+    <div class="footer_client_right">
+      <div class="footer_client_right_head">
+        Контакты
+      </div>
+      <a href="tel:+79372552649" class="footer_client_right_link">
+        +7 9372 55 26 49
+      </a>
+      <a href="tel:+79272233521" class="footer_client_right_link">
+        +7 9272 23 35 21
+      </a>
+      <div class="footer_client_right_head">
+        Соцсети
+      </div>
+      <div class="footer_client_right_block">
+        <a class="footer_client_right_block_link" href="/">
+          <img class="footer_client_right_block_link_img" th:src="@{/img/images/vkIcon.svg}" alt="vk" />
+        </a>
+        <a class="footer_client_right_block_link" href="/">
+          <img class="footer_client_right_block_link_img" th:src="@{/img/images/viberIcon.svg}" alt="viber" />
+        </a>
+        <a class="footer_client_right_block_link" href="/">
+          <img class="footer_client_right_block_link_img" th:src="@{/img/images/telegramIcon.svg}" alt="telegram" />
+        </a>
+        <a class="footer_client_right_block_link" href="/">
+          <img class="footer_client_right_block_link_img" th:src="@{/img/images/mailRuIcon.svg}" alt="mail" />
+        </a>
+      </div>
+      <div class="footer_client_right_info">
+
+      </div>
+    </div>
+  </footer>
+</div>
+<script>
+  magnify("myimage", 2);
+</script>
+</body>
+</html>

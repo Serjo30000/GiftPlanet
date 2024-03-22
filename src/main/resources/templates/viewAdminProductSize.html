@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thyneleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8" content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Просмотр размера</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/media.css}"/>
+</head>
+<body>
+<header class="header_admin">
+  <div class="header_admin_block">
+    <div class="header_admin_block_logo">
+      <a href="/"><img class="header_admin_block_logo_img" th:src="@{/img/images/logotype.png}" alt="Logotype" /></a>
+    </div>
+    <div class="header_admin_block_menu">
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminUser">Пользователи</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminProduct">Товары</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminOrder">Заказы</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminBanner">Баннеры</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminCatalog">Каталоги</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminStatistics">Статистика</a>
+      </div>
+    </div>
+    <div class="header_admin_block_log" sec:authorize="isAuthenticated()">
+      <div class="header_admin_block_login" sec:authentication="name">
+
+      </div>
+      <div class="header_admin_block_logout">
+        <a class="header_admin_block_logout_link" href="/logout">Выйти</a>
+      </div>
+    </div>
+    <div class="header_admin_block_log" sec:authorize="!isAuthenticated()">
+      <div class="header_admin_block_login">
+        Логин
+      </div>
+      <div class="header_admin_block_logout">
+        <a class="header_admin_block_logout_link" href="/login">Войти</a>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="admin_window_view_productSize">
+  <div class="admin_window_view_productSize_form" th:object="${productSizeForm}">
+    <div class="admin_window_view_productSize_form_field_head">
+      Размер
+    </div>
+    <div class="admin_window_view_productSize_form_field">
+      <div class="admin_window_view_productSize_form_field_text">Номер:&nbsp;</div>
+      <div class="admin_window_view_productSize_form_field_text" th:text="*{id}"></div>
+    </div>
+    <div class="admin_window_view_productSize_form_field">
+      <div class="admin_window_view_productSize_form_field_text">Цена:&nbsp;</div>
+      <div class="admin_window_view_productSize_form_field_text" th:text="*{price}"></div>
+    </div>
+    <div class="admin_window_view_productSize_form_field">
+      <div class="admin_window_view_productSize_form_field_text">Скидка:&nbsp;</div>
+      <div class="admin_window_view_productSize_form_field_text" th:text="*{discount}"></div>
+    </div>
+    <div class="admin_window_view_productSize_form_field">
+      <div class="admin_window_view_productSize_form_field_text">Размер:&nbsp;</div>
+      <div class="admin_window_view_productSize_form_field_text" th:text="*{sizeProduct}"></div>
+    </div>
+    <div class="admin_window_view_productSize_form_field">
+      <div class="admin_window_view_productSize_form_field_text">Номер товара:&nbsp;</div>
+      <div class="admin_window_view_productSize_form_field_text" th:text="*{productId}"></div>
+    </div>
+    <div class="admin_window_view_productSize_form_field">
+      <a class="admin_window_view_productSize_form_field_link" th:href="@{/adminPanel/adminProduct/adminProductSize(productId=*{productId})}">Вернуться</a>
+    </div>
+  </div>
+</div>
+</body>
+</html>

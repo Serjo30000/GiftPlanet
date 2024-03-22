@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thyneleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8" content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Заказынные товары</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/media.css}"/>
+</head>
+<body>
+<header class="header_admin">
+  <div class="header_admin_block">
+    <div class="header_admin_block_logo">
+      <a href="/"><img class="header_admin_block_logo_img" th:src="@{/img/images/logotype.png}" alt="Logotype" /></a>
+    </div>
+    <div class="header_admin_block_menu">
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminUser">Пользователи</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminProduct">Товары</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminOrder">Заказы</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminBanner">Баннеры</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminCatalog">Каталоги</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminStatistics">Статистика</a>
+      </div>
+    </div>
+    <div class="header_admin_block_log" sec:authorize="isAuthenticated()">
+      <div class="header_admin_block_login" sec:authentication="name">
+
+      </div>
+      <div class="header_admin_block_logout">
+        <a class="header_admin_block_logout_link" href="/logout">Выйти</a>
+      </div>
+    </div>
+    <div class="header_admin_block_log" sec:authorize="!isAuthenticated()">
+      <div class="header_admin_block_login">
+        Логин
+      </div>
+      <div class="header_admin_block_logout">
+        <a class="header_admin_block_logout_link" href="/login">Войти</a>
+      </div>
+    </div>
+  </div>
+</header>
+<h1 class="head_table_admin">
+  Таблица: Заказынные товары
+</h1>
+<div class="admin_sort">
+  <div class="admin_sort_block">
+    <form class="admin_sort_block_elem_left" th:action="@{/adminPanel/adminOrder/adminOrderProduct}" method="post">
+      <div class="admin_sort_block_elem_left_size">
+        <tr th:each="orderProduct,i : ${allOrderProducts}">
+          <input type="hidden" name="orderId" th:value="${undoListCreate}"/>
+          <td><input name="lstOrPr" th:value="${orderProduct.getId()}" type="hidden"></td>
+        </tr>
+        <select class="admin_sort_block_elem_left_size_input" name="sortName" size="1" required>
+          <option selected value="Отсутствует">Отсутствует</option>
+          <option value="По номеру">По номеру</option>
+          <option value="По названию">По названию</option>
+          <option value="По цене">По цене</option>
+          <option value="По скидке">По скидке</option>
+          <option value="По группе">По группе</option>
+          <option value="По размеру">По размеру</option>
+          <option value="По материалу">По материалу</option>
+          <option value="По количеству">По количеству</option>
+          <option value="По номеру заказа">По номеру заказа</option>
+        </select>
+      </div>
+      <div class="admin_sort_block_elem_left_size">
+        <select class="admin_sort_block_elem_left_size_input" name="sortBy" size="1" required>
+          <option selected value="По возрастанию">По возрастанию</option>
+          <option value="По убыванию">По убыванию</option>
+        </select>
+      </div>
+      <div class="admin_sort_block_elem_left_size" th:if="${allOrderProducts.size()>0}">
+        <button class="admin_sort_block_elem_left_size_input_button" type="submit">Применить</button>
+      </div>
+      <div class="admin_sort_block_elem_left_size" th:if="${allOrderProducts.size()<=0}">
+        <button class="admin_sort_block_elem_left_size_input_button" type="button">Применить</button>
+      </div>
+    </form>
+    <form class="admin_sort_block_elem_right" th:action="@{/adminPanel/adminOrder/adminOrderProduct}" method="post">
+      <div class="admin_sort_block_elem_right_size">
+        <input type="hidden" name="orderId" th:value="${undoListCreate}"/>
+        <button class="admin_sort_block_elem_right_size_input_button" type="submit">Сбросить</button>
+      </div>
+    </form>
+  </div>
+</div>
+<table>
+  <thead>
+  <th>Номер</th>
+  <th>Название</th>
+  <th>Фото</th>
+  <th>Цена</th>
+  <th>Скидка</th>
+  <th>Группа</th>
+  <th>Размер</th>
+  <th>Материал</th>
+  <th>Количество</th>
+  <th>Номер заказа</th>
+  <th>Удалить</th>
+  <th>Посмотреть</th>
+  </thead>
+  <tr data-th-each="orderProduct : ${allOrderProducts}">
+    <td data-th-text="${orderProduct.id}"></td>
+    <td data-th-text="${orderProduct.nameProduct}"></td>
+    <td data-th-text="${orderProduct.photoProduct}"></td>
+    <td data-th-text="${orderProduct.price}"></td>
+    <td data-th-text="${orderProduct.discount}"></td>
+    <td data-th-text="${orderProduct.groupProduct}"></td>
+    <td data-th-text="${orderProduct.sizeProduct}"></td>
+    <td data-th-text="${orderProduct.material}"></td>
+    <td data-th-text="${orderProduct.count}"></td>
+    <td data-th-text="${orderProduct.orderId}"></td>
+    <td>
+      <form th:action="@{/adminPanel/adminOrder/adminOrderProduct}" method="post">
+        <input type="hidden" name="orderProductId" th:value="${orderProduct.id}"/>
+        <input type="hidden" name="action" value="delete"/>
+        <button class="table_admin_form_button" type="submit">Удалить</button>
+      </form>
+    </td>
+    <td>
+      <form th:action="@{/adminPanel/adminOrder/adminOrderProduct/viewAdminOrderProduct}" method="get">
+        <input type="hidden" name="orderProductId" th:value="${orderProduct.id}"/>
+        <button class="table_admin_form_button" type="submit">Посмотреть</button>
+      </form>
+    </td>
+  </tr>
+</table>
+<div class="undo_admin">
+  <a class="undo_admin_link" href="/adminPanel/adminOrder">Вернуться</a>
+</div>
+
+</body>
+</html>

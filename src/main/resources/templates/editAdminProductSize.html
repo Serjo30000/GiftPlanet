@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thyneleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8" content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Изменение размера</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/media.css}"/>
+</head>
+<body>
+<header class="header_admin">
+  <div class="header_admin_block">
+    <div class="header_admin_block_logo">
+      <a href="/"><img class="header_admin_block_logo_img" th:src="@{/img/images/logotype.png}" alt="Logotype" /></a>
+    </div>
+    <div class="header_admin_block_menu">
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminUser">Пользователи</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminProduct">Товары</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminOrder">Заказы</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminBanner">Баннеры</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminCatalog">Каталоги</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminStatistics">Статистика</a>
+      </div>
+    </div>
+    <div class="header_admin_block_log" sec:authorize="isAuthenticated()">
+      <div class="header_admin_block_login" sec:authentication="name">
+
+      </div>
+      <div class="header_admin_block_logout">
+        <a class="header_admin_block_logout_link" href="/logout">Выйти</a>
+      </div>
+    </div>
+    <div class="header_admin_block_log" sec:authorize="!isAuthenticated()">
+      <div class="header_admin_block_login">
+        Логин
+      </div>
+      <div class="header_admin_block_logout">
+        <a class="header_admin_block_logout_link" href="/login">Войти</a>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="admin_window_edit_productSize">
+  <form class="admin_window_edit_productSize_form" th:action="@{/adminPanel/adminProduct/adminProductSize/editAdminProductSize}" th:object="${productSizeForm}" method="post">
+    <div class="admin_window_edit_productSize_form_field_head">
+      Изменение
+    </div>
+    <div class="admin_window_edit_productSize_form_field_error" th:if="${param.error}">
+      Заполните поля верно.
+    </div>
+    <input name="id" type="hidden" th:field="*{id}" />
+    <div class="admin_window_edit_productSize_form_field_text">
+      Цена
+    </div>
+    <div class="admin_window_edit_productSize_form_field">
+      <input class="admin_window_edit_productSize_form_field_input" min="0" name="price" placeholder="Цена" type="number" th:field="*{price}" required/>
+    </div>
+    <div class="admin_window_edit_productSize_form_field_text">
+      Скидка
+    </div>
+    <div class="admin_window_edit_productSize_form_field">
+      <input class="admin_window_edit_productSize_form_field_input" min="0" max="100" name="discount" placeholder="Скидка" type="number" th:field="*{discount}" required/>
+    </div>
+    <div class="admin_window_edit_productSize_form_field_text">
+      Размер
+    </div>
+    <div class="admin_window_edit_productSize_form_field">
+      <input class="admin_window_edit_productSize_form_field_input" name="sizeProduct" placeholder="Размер" type="text" th:field="*{sizeProduct}" required/>
+    </div>
+    <div>
+      <input name="productId" min="1" placeholder="Номер размера" type="hidden" th:field="*{productId}" required/>
+    </div>
+    <div class="admin_window_edit_productSize_form_field">
+      <button class="admin_window_edit_productSize_form_field_button" type="submit">Изменить</button>
+    </div>
+    <div class="admin_window_edit_productSize_form_field">
+      <a class="admin_window_edit_productSize_form_field_link" th:href="@{/adminPanel/adminProduct/adminProductSize(productId=*{productId})}">Вернуться</a>
+    </div>
+  </form>
+</div>
+</body>
+</html>

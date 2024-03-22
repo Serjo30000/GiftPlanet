@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thyneleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8" content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Каталоги</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/media.css}"/>
+</head>
+<body>
+<header class="header_admin">
+  <div class="header_admin_block">
+    <div class="header_admin_block_logo">
+      <a href="/"><img class="header_admin_block_logo_img" th:src="@{/img/images/logotype.png}" alt="Logotype" /></a>
+    </div>
+    <div class="header_admin_block_menu">
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminUser">Пользователи</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminProduct">Товары</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminOrder">Заказы</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminBanner">Баннеры</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminCatalog">Каталоги</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminStatistics">Статистика</a>
+      </div>
+    </div>
+    <div class="header_admin_block_log" sec:authorize="isAuthenticated()">
+      <div class="header_admin_block_login" sec:authentication="name">
+
+      </div>
+      <div class="header_admin_block_logout">
+        <a class="header_admin_block_logout_link" href="/logout">Выйти</a>
+      </div>
+    </div>
+    <div class="header_admin_block_log" sec:authorize="!isAuthenticated()">
+      <div class="header_admin_block_login">
+        Логин
+      </div>
+      <div class="header_admin_block_logout">
+        <a class="header_admin_block_logout_link" href="/login">Войти</a>
+      </div>
+    </div>
+  </div>
+</header>
+<h1 class="head_table_admin">
+  Таблица: Каталоги
+</h1>
+<div class="admin_sort">
+  <div class="admin_sort_block">
+    <form class="admin_sort_block_elem_left" th:action="@{/adminPanel/adminCatalog}" method="post">
+      <div class="admin_sort_block_elem_left_size">
+        <tr th:each="catalog,i : ${allCatalogs}">
+          <td><input name="lstCt" th:value="${catalog.getId()}" type="hidden"></td>
+        </tr>
+        <select class="admin_sort_block_elem_left_size_input" name="sortName" size="1" required>
+          <option selected value="Отсутствует">Отсутствует</option>
+          <option value="По номеру">По номеру</option>
+          <option value="По названию">По названию</option>
+        </select>
+      </div>
+      <div class="admin_sort_block_elem_left_size">
+        <select class="admin_sort_block_elem_left_size_input" name="sortBy" size="1" required>
+          <option selected value="По возрастанию">По возрастанию</option>
+          <option value="По убыванию">По убыванию</option>
+        </select>
+      </div>
+      <div class="admin_sort_block_elem_left_size" th:if="${allCatalogs.size()>0}">
+        <button class="admin_sort_block_elem_left_size_input_button" type="submit">Применить</button>
+      </div>
+      <div class="admin_sort_block_elem_left_size" th:if="${allCatalogs.size()<=0}">
+        <button class="admin_sort_block_elem_left_size_input_button" type="button">Применить</button>
+      </div>
+    </form>
+    <form class="admin_sort_block_elem_right" th:action="@{/adminPanel/adminCatalog}" method="post">
+      <div class="admin_sort_block_elem_right_size">
+        <button class="admin_sort_block_elem_right_size_input_button" type="submit">Сбросить</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="create_admin">
+  <form class="create_admin_form" th:action="@{/adminPanel/adminCatalog/createAdminCatalog}" method="get">
+    <button class="create_admin_form_button" type="submit">Создать</button>
+  </form>
+</div>
+<table>
+  <thead>
+  <th>Номер</th>
+  <th>Название</th>
+  <th>Иконка</th>
+  <th>Картинка</th>
+  <th>Посмотреть</th>
+  <th>Удалить</th>
+  </thead>
+  <tr data-th-each="catalog : ${allCatalogs}">
+    <td data-th-text="${catalog.id}"></td>
+    <td data-th-text="${catalog.name}"></td>
+    <td data-th-text="${catalog.icon}"></td>
+    <td data-th-text="${catalog.img}"></td>
+    <td>
+      <form th:action="@{/adminPanel/adminCatalog/viewAdminCatalog}" method="get">
+        <input type="hidden" name="catalogId" th:value="${catalog.id}"/>
+        <button class="table_admin_form_button" type="submit">Посмотреть</button>
+      </form>
+    </td>
+    <td>
+      <form th:action="@{/adminPanel/adminCatalog}" method="post">
+        <input type="hidden" name="catalogId" th:value="${catalog.id}"/>
+        <input type="hidden" name="action" value="delete"/>
+        <button class="table_admin_form_button" type="submit">Удалить</button>
+      </form>
+    </td>
+  </tr>
+</table>
+<div class="undo_admin">
+  <a class="undo_admin_link" href="/adminPanel">Вернуться</a>
+</div>
+</body>
+</html>

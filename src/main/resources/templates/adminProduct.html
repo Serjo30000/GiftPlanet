@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thyneleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8" content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Товары</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/media.css}"/>
+</head>
+<body>
+<header class="header_admin">
+  <div class="header_admin_block">
+    <div class="header_admin_block_logo">
+      <a href="/"><img class="header_admin_block_logo_img" th:src="@{/img/images/logotype.png}" alt="Logotype" /></a>
+    </div>
+    <div class="header_admin_block_menu">
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminUser">Пользователи</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminProduct">Товары</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminOrder">Заказы</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminBanner">Баннеры</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminCatalog">Каталоги</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminStatistics">Статистика</a>
+      </div>
+    </div>
+    <div class="header_admin_block_log" sec:authorize="isAuthenticated()">
+      <div class="header_admin_block_login" sec:authentication="name">
+
+      </div>
+      <div class="header_admin_block_logout">
+        <a class="header_admin_block_logout_link" href="/logout">Выйти</a>
+      </div>
+    </div>
+    <div class="header_admin_block_log" sec:authorize="!isAuthenticated()">
+      <div class="header_admin_block_login">
+        Логин
+      </div>
+      <div class="header_admin_block_logout">
+        <a class="header_admin_block_logout_link" href="/login">Войти</a>
+      </div>
+    </div>
+  </div>
+</header>
+<h1 class="head_table_admin">
+  Таблица: Товары
+</h1>
+<div class="admin_sort">
+  <div class="admin_sort_block">
+    <form class="admin_sort_block_elem_left" th:action="@{/adminPanel/adminProduct}" method="post">
+      <div class="admin_sort_block_elem_left_size">
+        <tr th:each="product,i : ${allProducts}">
+          <td><input name="lstPr" th:value="${product.getId()}" type="hidden"></td>
+        </tr>
+        <select class="admin_sort_block_elem_left_size_input" name="sortName" size="1" required>
+          <option selected value="Отсутствует">Отсутствует</option>
+          <option value="По номеру">По номеру</option>
+          <option value="По названию">По названию</option>
+          <option value="По группе">По группе</option>
+          <option value="По материалу">По материалу</option>
+        </select>
+      </div>
+      <div class="admin_sort_block_elem_left_size">
+        <select class="admin_sort_block_elem_left_size_input" name="sortBy" size="1" required>
+          <option selected value="По возрастанию">По возрастанию</option>
+          <option value="По убыванию">По убыванию</option>
+        </select>
+      </div>
+      <div class="admin_sort_block_elem_left_size" th:if="${allProducts.size()>0}">
+        <button class="admin_sort_block_elem_left_size_input_button" type="submit">Применить</button>
+      </div>
+      <div class="admin_sort_block_elem_left_size" th:if="${allProducts.size()<=0}">
+        <button class="admin_sort_block_elem_left_size_input_button" type="button">Применить</button>
+      </div>
+    </form>
+    <form class="admin_sort_block_elem_right" th:action="@{/adminPanel/adminProduct}" method="post">
+      <div class="admin_sort_block_elem_right_size">
+        <button class="admin_sort_block_elem_right_size_input_button" type="submit">Сбросить</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="create_admin">
+  <form class="create_admin_form" th:action="@{/adminPanel/adminProduct/createAdminProduct}" method="get">
+    <button class="create_admin_form_button" type="submit">Создать</button>
+  </form>
+</div>
+<table>
+  <thead>
+  <th>Номер</th>
+  <th>Название</th>
+  <th>Фото</th>
+  <th>Группа</th>
+  <th>Материал</th>
+  <th>Посмотреть</th>
+  <th>Изменить</th>
+  <th>Удалить</th>
+  <th>Размеры</th>
+  </thead>
+  <tr data-th-each="product : ${allProducts}">
+    <td data-th-text="${product.id}"></td>
+    <td data-th-text="${product.nameProduct}"></td>
+    <td data-th-text="${product.photoProduct}"></td>
+    <td data-th-text="${product.groupProduct}"></td>
+    <td data-th-text="${product.material}"></td>
+    <td>
+      <form th:action="@{/adminPanel/adminProduct/viewAdminProduct}" method="get">
+        <input type="hidden" name="productId" th:value="${product.id}"/>
+        <button class="table_admin_form_button" type="submit">Посмотреть</button>
+      </form>
+    </td>
+    <td>
+      <form th:action="@{/adminPanel/adminProduct/editAdminProduct}" method="get">
+        <input type="hidden" name="productId" th:value="${product.id}"/>
+        <button class="table_admin_form_button" type="submit">Изменить</button>
+      </form>
+    </td>
+    <td>
+      <form th:action="@{/adminPanel/adminProduct}" method="post">
+        <input type="hidden" name="productId" th:value="${product.id}"/>
+        <input type="hidden" name="action" value="delete"/>
+        <button class="table_admin_form_button" type="submit">Удалить</button>
+      </form>
+    </td>
+    <td >
+      <form th:action="@{/adminPanel/adminProduct/adminProductSize}" method="get">
+        <input type="hidden" name="productId" th:value="${product.id}"/>
+        <button class="table_admin_form_button" type="submit">Размеры</button>
+      </form>
+    </td>
+  </tr>
+</table>
+<div class="undo_admin">
+  <a class="undo_admin_link" href="/adminPanel">Вернуться</a>
+</div>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thyneleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8" content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Создание товара</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/media.css}"/>
+</head>
+<body>
+<header class="header_admin">
+  <div class="header_admin_block">
+    <div class="header_admin_block_logo">
+      <a href="/"><img class="header_admin_block_logo_img" th:src="@{/img/images/logotype.png}" alt="Logotype" /></a>
+    </div>
+    <div class="header_admin_block_menu">
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminUser">Пользователи</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminProduct">Товары</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminOrder">Заказы</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminBanner">Баннеры</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminCatalog">Каталоги</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminStatistics">Статистика</a>
+      </div>
+    </div>
+    <div class="header_admin_block_log" sec:authorize="isAuthenticated()">
+      <div class="header_admin_block_login" sec:authentication="name">
+
+      </div>
+      <div class="header_admin_block_logout">
+        <a class="header_admin_block_logout_link" href="/logout">Выйти</a>
+      </div>
+    </div>
+    <div class="header_admin_block_log" sec:authorize="!isAuthenticated()">
+      <div class="header_admin_block_login">
+        Логин
+      </div>
+      <div class="header_admin_block_logout">
+        <a class="header_admin_block_logout_link" href="/login">Войти</a>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="admin_window_create_product">
+  <form class="admin_window_create_product_form" enctype="multipart/form-data" th:action="@{/adminPanel/adminProduct/createAdminProduct}" th:object="${productForm}" method="post">
+    <div class="admin_window_create_product_form_field_head">
+      Создание
+    </div>
+    <div class="admin_window_create_product_form_field_error" th:if="${param.error}">
+      Заполните поля верно.
+    </div>
+    <div class="admin_window_create_product_form_field_text">
+      Название
+    </div>
+    <div class="admin_window_create_product_form_field">
+      <input class="admin_window_create_product_form_field_input" placeholder="Название" type="text" th:field="*{nameProduct}" required/>
+    </div>
+    <div class="admin_window_create_product_form_field_text">
+      Описание
+    </div>
+    <div class="admin_window_create_product_form_field">
+      <input class="admin_window_create_product_form_field_input" placeholder="Описание" type="text" th:field="*{description}" required/>
+    </div>
+    <div class="admin_window_create_product_form_field_text">
+      Фото
+    </div>
+    <div class="admin_window_create_product_form_field">
+      <input class="admin_window_create_product_form_field_input" placeholder="Фото" type="file" accept="image/png" name="imgFile" required/>
+    </div>
+    <div class="admin_window_create_product_form_field_text">
+      Группа
+    </div>
+    <div class="admin_window_create_product_form_field">
+      <select class="admin_window_create_product_form_field_input" name="groupProduct" th:field="*{groupProduct}" required>
+        <option selected="selected" value="Отсутствует">Отсутствует</option>
+        <option data-th-each="catalog : ${AllCatalogs}" th:value="${catalog.getName()}" th:text="${catalog.getName()}"></option>
+<!--        <option selected="selected" value="Постельное бельё">Постельное бельё</option>-->
+<!--        <option value="Одеяла">Одеяла</option>-->
+<!--        <option value="Подушки">Подушки</option>-->
+<!--        <option value="Матрасы">Матрасы</option>-->
+<!--        <option value="Пледы">Пледы</option>-->
+<!--        <option value="Наматрасники">Наматрасники</option>-->
+<!--        <option value="Простыни">Простыни</option>-->
+<!--        <option value="Домашний трикотаж">Домашний трикотаж</option>-->
+<!--        <option value="Мужские футболки">Мужские футболки</option>-->
+<!--        <option value="Одежда для детей от 0">Одежда для детей от 0</option>-->
+<!--        <option value="Штучные изделия">Штучные изделия</option>-->
+<!--        <option value="Прочие">Прочие</option>-->
+      </select>
+    </div>
+    <div class="admin_window_create_product_form_field_text">
+      Материал
+    </div>
+    <div class="admin_window_create_product_form_field">
+      <input class="admin_window_create_product_form_field_input" placeholder="Материал" type="text" th:field="*{material}" required/>
+    </div>
+    <div class="admin_window_create_product_form_field">
+      <button class="admin_window_create_product_form_field_button" type="submit">Создать</button>
+    </div>
+    <div class="admin_window_create_product_form_field">
+      <a class="admin_window_create_product_form_field_link" href="/adminPanel/adminProduct">Вернуться</a>
+    </div>
+  </form>
+</div>
+</body>
+</html>

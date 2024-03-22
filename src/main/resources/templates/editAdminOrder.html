@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thyneleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8" content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Изменение заказа</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/media.css}"/>
+</head>
+<body>
+<header class="header_admin">
+  <div class="header_admin_block">
+    <div class="header_admin_block_logo">
+      <a href="/"><img class="header_admin_block_logo_img" th:src="@{/img/images/logotype.png}" alt="Logotype" /></a>
+    </div>
+    <div class="header_admin_block_menu">
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminUser">Пользователи</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminProduct">Товары</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminOrder">Заказы</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminBanner">Баннеры</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminCatalog">Каталоги</a>
+      </div>
+      <div class="header_admin_block_menu_component">
+        <a class="header_admin_block_menu_component_link" href="/adminPanel/adminStatistics">Статистика</a>
+      </div>
+    </div>
+    <div class="header_admin_block_log" sec:authorize="isAuthenticated()">
+      <div class="header_admin_block_login" sec:authentication="name">
+
+      </div>
+      <div class="header_admin_block_logout">
+        <a class="header_admin_block_logout_link" href="/logout">Выйти</a>
+      </div>
+    </div>
+    <div class="header_admin_block_log" sec:authorize="!isAuthenticated()">
+      <div class="header_admin_block_login">
+        Логин
+      </div>
+      <div class="header_admin_block_logout">
+        <a class="header_admin_block_logout_link" href="/login">Войти</a>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="admin_window_edit_order">
+  <form class="admin_window_edit_order_form" th:action="@{/adminPanel/adminOrder/editAdminOrder}" th:object="${orderForm}" method="post">
+    <div class="admin_window_edit_order_form_field_head">
+      Изменение
+    </div>
+    <div class="admin_window_edit_order_form_field_error" th:if="${param.error}">
+      Заполните поля верно.
+    </div>
+    <input name="id" type="hidden" th:field="*{id}" />
+    <div>
+      <input name="phone" placeholder="Телефон" type="hidden" th:field="*{phone}" required/>
+    </div>
+    <div>
+      <input name="phone" placeholder="Почта" type="hidden" th:field="*{mail}" required/>
+    </div>
+    <div>
+      <input name="phone" placeholder="Оплата" type="hidden" th:field="*{payment}" required/>
+    </div>
+    <div>
+      <input name="nameUser" placeholder="Имя" type="hidden" th:field="*{nameUser}" required/>
+    </div>
+    <div>
+      <input name="surnameUser" placeholder="Фамилия" type="hidden" th:field="*{surnameUser}" required/>
+    </div>
+    <div>
+      <input name="orderStatus" placeholder="Статус" type="hidden" th:field="*{orderStatus}" required/>
+    </div>
+    <div>
+      <input name="coordinate" placeholder="Координаты" type="hidden" th:field="*{coordinate}" required/>
+    </div>
+    <div class="admin_window_edit_order_form_field_text">
+      Название
+    </div>
+    <div class="admin_window_edit_order_form_field">
+      <select class="admin_window_edit_order_form_field_input" name="statusText" required>
+        <option selected="selected" value="Не оплачен">Не оплачен</option>
+        <option value="Оплачен">Оплачен</option>
+      </select>
+    </div>
+    <div>
+      <input name="createDate" placeholder="Дата создания" type="hidden" th:field="*{createDate}" required/>
+    </div>
+    <div class="admin_window_edit_order_form_field">
+      <button class="admin_window_edit_order_form_field_button" type="submit">Изменить</button>
+    </div>
+    <div class="admin_window_edit_order_form_field">
+      <a class="admin_window_edit_order_form_field_link" href="/adminPanel/adminOrder">Вернуться</a>
+    </div>
+  </form>
+</div>
+</body>
+</html>

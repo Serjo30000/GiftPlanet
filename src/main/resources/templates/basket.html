@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thyneleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8" content="width=device-width, initial-scale=1" name="viewport"/>
+  <title>Корзина</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/media.css}"/>
+</head>
+<body>
+<div class="wrapper">
+  <header class="header_client">
+    <div class="header_client_up">
+      <div class="header_client_up_component">
+        <a href="/howToOrder" class="header_client_up_component_link">
+          Как заказать
+        </a>
+      </div>
+      <div class="header_client_up_component">
+        <a href="/company" class="header_client_up_component_link">
+          О нас
+        </a>
+      </div>
+      <div class="header_client_up_component">
+        <a href="/contacts" class="header_client_up_component_link">
+          Контакты
+        </a>
+      </div>
+      <div class="header_client_up_component">
+        <img class="header_client_up_component_svg" th:src="@{/img/images/phoneIcon.svg}" alt="phone" />
+        <a href="tel:+79372552649" class="header_client_up_component_link">
+          +7 937 255 26 49
+        </a>
+      </div>
+      <div class="header_client_up_component">
+        <img class="header_client_up_component_svg" th:src="@{/img/images/mailIcon.svg}" alt="mail" />
+        <a href="mailto:zakazplanetapodarkov@yandex.ru" class="header_client_up_component_link">
+          Написать
+        </a>
+      </div>
+    </div>
+    <div class="header_client_down">
+      <div class="header_client_down_component_logo">
+        <a href="/" class="header_client_down_component_head">
+          Планета подарков
+        </a>
+      </div>
+      <div sec:authorize="isAuthenticated()" class="header_client_down_component">
+        <a href="/adminPanel" sec:authentication="name" class="header_client_down_component_link">
+        </a>
+      </div>
+      <div sec:authorize="!isAuthenticated()" class="header_client_down_component">
+        <a href="/" class="header_client_down_component_link">
+          Гость
+        </a>
+      </div>
+      <div sec:authorize="isAuthenticated()" class="header_client_down_component">
+        <a class="header_client_down_component_link" href="/logout">
+          Выйти
+        </a>
+      </div>
+      <div sec:authorize="!isAuthenticated()" class="header_client_down_component">
+        <a class="header_client_down_component_link" href="/login">
+          Войти
+        </a>
+      </div>
+      <div class="header_client_down_component">
+        <img class="header_client_down_component_svg" th:src="@{/img/images/catalogIcon.svg}" alt="catalog" />
+        <a href="/catalog" class="header_client_down_component_link">
+          Каталог товаров
+        </a>
+      </div>
+      <div class="header_client_down_component">
+        <img class="header_client_down_component_svg" th:src="@{/img/images/basketIcon.svg}" alt="basket" />
+        <a href="/basket" class="header_client_down_component_link">
+          Корзина
+        </a>
+      </div>
+    </div>
+  </header>
+  <section class="content_client">
+    <div class="basket_client">
+      <div class="basket_client_block">
+        <div class="basket_client_block_elem">
+          Изображение
+        </div>
+        <div class="basket_client_block_elem">
+          Название
+        </div>
+        <div class="basket_client_block_elem">
+          Вид
+        </div>
+        <div class="basket_client_block_elem">
+          Материал
+        </div>
+        <div class="basket_client_block_elem">
+          Размер
+        </div>
+        <div class="basket_client_block_elem">
+          Цена
+        </div>
+        <div class="basket_client_block_elem">
+          Количество
+        </div>
+        <div class="basket_client_block_elem">
+          Пересчитать
+        </div>
+        <div class="basket_client_block_elem">
+          Удалить
+        </div>
+      </div>
+      <div class="basket_client_block" data-th-each="orderProductSession : ${allOrderProductSessions}">
+        <a th:href="@{/catalog/catalogProduct/viewCatalogProduct(groupProduct=${orderProductSession.groupProduct},productId=${productServ.findProductByName(orderProductSession.nameProduct).getId()})}" class="basket_client_block_elem">
+          <img class="basket_client_block_elem_img" th:src="@{'/uploads/img/images/' + ${orderProductSession.photoProduct}}" alt="catalogImg" />
+        </a>
+        <div class="basket_client_block_elem" data-th-text="${orderProductSession.nameProduct}">
+
+        </div>
+        <div class="basket_client_block_elem" data-th-text="${orderProductSession.groupProduct}">
+
+        </div>
+        <div class="basket_client_block_elem" data-th-text="${orderProductSession.material}">
+
+        </div>
+        <div class="basket_client_block_elem" data-th-text="${orderProductSession.sizeProduct}">
+
+        </div>
+        <div class="basket_client_block_elem">
+          <div data-th-text="${orderProductServ.priceWithDiscount(orderProductSession.price,orderProductSession.discount)}">
+
+          </div>
+          <div>
+            ₽
+          </div>
+        </div>
+        <form class="basket_client_block_elem_double" th:action="@{/basket}" method="post">
+          <input class="basket_client_block_elem_double_input" name="countOrderProduct" min="1" max="2147483647" placeholder="Количество" type="number" th:value="${orderProductSession.count}"/>
+          <input type="hidden" name="orderProductName" th:value="${orderProductSession.nameProduct}"/>
+          <input type="hidden" name="orderProductGroup" th:value="${orderProductSession.groupProduct}"/>
+          <input type="hidden" name="orderProductPrice" th:value="${orderProductSession.price}"/>
+          <input type="hidden" name="orderProductDiscount" th:value="${orderProductSession.discount}"/>
+          <input type="hidden" name="orderProductSize" th:value="${orderProductSession.sizeProduct}"/>
+          <button class="basket_client_block_elem_double_button" type="submit">Пересчитать</button>
+        </form>
+        <form class="basket_client_block_elem" th:action="@{/basket}" method="post">
+          <input type="hidden" name="orderProductName" th:value="${orderProductSession.nameProduct}"/>
+          <input type="hidden" name="orderProductGroup" th:value="${orderProductSession.groupProduct}"/>
+          <input type="hidden" name="orderProductPrice" th:value="${orderProductSession.price}"/>
+          <input type="hidden" name="orderProductDiscount" th:value="${orderProductSession.discount}"/>
+          <input type="hidden" name="orderProductSize" th:value="${orderProductSession.sizeProduct}"/>
+          <input type="hidden" name="action" value="delete"/>
+          <button class="basket_client_block_elem_button" type="submit">Удалить</button>
+        </form>
+      </div>
+      <div class="basket_client_button_block">
+        <div class="basket_client_button_block_text">
+          <div>
+            Общая цена:&#160;
+          </div>
+          <div th:text="${allPrice}">
+
+          </div>
+          <div>
+            ₽
+          </div>
+        </div>
+        <form class="basket_client_button_block_form" th:action="@{/basket/buyOrder}" method="get">
+          <button class="basket_client_button_block_form_button">Оформить заказ</button>
+        </form>
+        <div th:if="${param.error}" class="basket_client_button_block_error">
+          Корзина пуста
+        </div>
+      </div>
+    </div>
+  </section>
+  <footer class="footer_client">
+    <div class="footer_client_left">
+      <div class="footer_client_left_head">
+        Склады и магазины
+      </div>
+      <a href="https://yandex.ru/maps/org/planeta_podarkov/1707885753/?ll=45.984000%2C51.521561&mode=search&sctx=ZAAAAAgBEAAaKAoSCTHQtS%2Bg%2BUZAEfCJdap8wUlAEhIJZK2h1F5Eiz8RT3Rd%2BMH5dD8iBgABAgMEBSgKOABAw80GSAFiEmxldG9fdl9nb3JvZGU9dHJ1ZWoCcnWdAc3MTD2gAQCoAQC9ARwrAGXCAQW5ibGuBuoBAPIBAPgBAIICQdCe0LPQvtGA0L7QtNC90LDRjyDRg9C70LjRhtCwLCA5MSDQn9C70LDQvdC10YLQsCDQv9C%2B0LTQsNGA0LrQvtCyigIAkgIDMTk0mgIMZGVza3RvcC1tYXBz&sll=45.984000%2C51.521561&sspn=0.106510%2C0.040957&text=Огородная%20улица%2C%2091%20Планета%20подарков&z=13.96" class="footer_client_left_link">
+        Магазин 'Планета подарков', Ул. Огородная, 91, расписание: без выходных с 9-00 до 19-30
+      </a>
+      <a href="https://yandex.ru/maps/org/postelnoye_belyo/176486838870/?ll=45.950429%2C51.497928&mode=search&sctx=ZAAAAAgBEAAaKAoSCcuhRbbz%2FUZAET3vxoLCwklAEhIJL4Zyol2Fyj8RhA1Pr5RltD8iBgABAgMEBSgKOABAiowGSAFiEmxldG9fdl9nb3JvZGU9dHJ1ZWoCcnWdAc3MTD2gAQCoAQC9Af4CF3PCAQbW5L27kQXqAQDyAQD4AQCCAnXQodC60LvQsNC0INCe0L%2FRgtC%2B0LLQvi3RgNC%2B0LfQvdC40YfQvdGL0Lkg0YDQsNGB0L%2FRgNC%2B0LTQsNC20L3Ri9C5INGG0LXQvdGC0YAsINCj0LsuINCa0YDRi9C80YHQutC40Lkg0L%2FRgNC%2B0LXQt9C0IDOKAgCSAgMxOTSaAgxkZXNrdG9wLW1hcHM%3D&sll=45.950429%2C51.497928&sspn=0.103598%2C0.039858&text=Склад%20Оптово-розничный%20распродажный%20центр%2C%20Ул.%20Крымский%20проезд%203&z=14" class="footer_client_left_link">
+        Склад Оптово-розничный распродажный центр, Ул. Крымский проезд 3, расписание: Вт, Чт, Пт с 10-00 до 16-00
+      </a>
+      <div class="footer_client_left_head">
+        Информация
+      </div>
+      <a href="/howToOrder" class="footer_client_left_link">
+        Как заказать
+      </a>
+      <a href="/company" class="footer_client_left_link">
+        О нас
+      </a>
+      <a href="/contacts" class="footer_client_left_link">
+        Контакты
+      </a>
+      <div class="footer_client_left_info">
+        © 1996-2023, ИП Моиисеенко Виктория Николаевна
+      </div>
+    </div>
+    <div class="footer_client_right">
+      <div class="footer_client_right_head">
+        Контакты
+      </div>
+      <a href="tel:+79372552649" class="footer_client_right_link">
+        +7 9372 55 26 49
+      </a>
+      <a href="tel:+74932500277" class="footer_client_right_link">
+        +7 4932 50 02 77
+      </a>
+      <div class="footer_client_right_head">
+        Соцсети
+      </div>
+      <div class="footer_client_right_block">
+        <a class="footer_client_right_block_link" href="https://vk.com/id331823120">
+          <img class="footer_client_right_block_link_img" th:src="@{/img/images/vkIcon.svg}" alt="vk" />
+        </a>
+        <a class="footer_client_right_block_link" href="viber://chat?number=79372552649">
+          <img class="footer_client_right_block_link_img" th:src="@{/img/images/viberIcon.svg}" alt="viber" />
+        </a>
+        <a class="footer_client_right_block_link" href="tg://resolve?domain=Viktoria_M_73">
+          <img class="footer_client_right_block_link_img" th:src="@{/img/images/telegramIcon.svg}" alt="telegram" />
+        </a>
+        <a class="footer_client_right_block_link" href="mailto:zakazplanetapodarkov@yandex.ru">
+          <img class="footer_client_right_block_link_img" th:src="@{/img/images/mailRuIcon.svg}" alt="mail" />
+        </a>
+      </div>
+      <div class="footer_client_right_info">
+
+      </div>
+    </div>
+  </footer>
+</div>
+</body>
+</html>
